@@ -6,6 +6,9 @@ public class CSVtoSObjectRecordsConverterAction {
         
         @InvocableVariable(label='CSV File ID' required=true)
         public string contentDocuemtId;
+        
+        @InvocableVariable(label='Fields to parse' required=true)
+        public string fieldList;
     }
 
     public class ActionOutput{
@@ -29,9 +32,10 @@ public class CSVtoSObjectRecordsConverterAction {
         csvStringContent = csvStringContent.replaceAll('(\r\n|\r)','\n');
         
         String[] csvRows = csvStringContent.split('\n');
-        String[] fields = csvRows[0].split(','); //Gives all the API names of the fields from the 1st CSV row
         csvRows.remove(0);
         map<String,Schema.DisplayType> fieldToFieldTypeMap = new map<String,Schema.DisplayType>();
+        List<String> fields = fieldList.split(',');
+        
         for (String field : fields) {
             fieldToFieldTypeMap.put(field, getFieldType(fieldMap, field));
         }
